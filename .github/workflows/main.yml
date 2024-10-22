@@ -1,0 +1,19 @@
+steps:
+  # Check out the repository
+- uses: actions/checkout@v2
+
+  # Compile the code for Java projects and get all libraries, e.g. via Maven
+- run: mvn -B compile
+
+  # Install all dependent libraries for JavaScript/TypeScript project, e.g. via npm
+- run: npm install
+
+  # Run the security analysis with default settings
+- name: Xanitizer Security Analysis
+  id: xanitizer
+  uses: RIGS-IT/xanitizer-action@v1
+  with:
+    license: ${{ secrets.XANITIZER_LICENSE }}
+
+  # Use the output from the `xanitizer` step
+- run: echo "Status messages from Xanitizer's security analysis - ${{ steps.xanitizer.outputs.security_analysis }}"
